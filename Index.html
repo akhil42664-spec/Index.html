@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Number Finder Pro</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#070b16;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px
+}
+.card{
+  width:100%;
+  max-width:450px;
+  background:#10182b;
+  border:1px solid #263b61;
+  border-radius:22px;
+  padding:28px;
+  box-shadow:0 0 35px #0066ff18
+}
+.logo{text-align:center;font-size:42px}
+h1{text-align:center;font-size:27px;margin-bottom:8px}
+.sub{text-align:center;color:#9caecc;font-size:14px;line-height:1.6}
+label{display:block;margin:25px 0 9px;font-size:14px}
+input{
+  width:100%;
+  padding:15px;
+  border-radius:10px;
+  border:1px solid #334968;
+  background:#080f1f;
+  color:white;
+  font-size:17px;
+  outline:none
+}
+button{
+  width:100%;
+  margin-top:14px;
+  padding:15px;
+  border:0;
+  border-radius:10px;
+  background:#1677ff;
+  color:white;
+  font-size:16px;
+  font-weight:bold
+}
+#result{
+  display:none;
+  margin-top:22px;
+  padding:17px;
+  background:#0a1222;
+  border-radius:12px;
+  line-height:1.8;
+  overflow-wrap:anywhere
+}
+.note{color:#93a6c7;font-size:12px;margin-top:18px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">🔎</div>
+  <h1>Number Finder Pro</h1>
+  <p class="sub">Mobile Number Information Checker</p><label for="phone">Enter mobile number with country code</label>
+<input id="phone" type="tel" placeholder="+91 9876543210">
+
+<button onclick="searchNumber()">Check Number</button>
+
+  <div id="result"></div>  <p class="note">
+    Privacy notice: This tool checks the number's format only.
+    It does not reveal a person's identity, father's name or home address.
+    Telecom details require a reliable data provider.
+  </p>
+</div><script>
+function searchNumber(){
+  const input=document.getElementById('phone').value.trim();
+  const result=document.getElementById('result');
+
+  result.style.display='block';
+
+  if(!/^\+?[0-9\s()-]{7,20}$/.test(input)){
+    result.innerHTML='❌ Please enter a valid number format.';
+    return;
+  }
+
+  const digits=input.replace(/\D/g,'');
+  let country='Unknown';
+  if(input.startsWith('+91') || (!input.startsWith('+') && digits.length===10)){
+    country='India (country code +91 assumed for a 10-digit number)';
+  }else if(input.startsWith('+1')){
+    country='North America (+1)';
+  }else if(input.startsWith('+44')){
+    country='United Kingdom (+44)';
+  }
+
+  result.innerHTML=`
+    <b>✅ Number format checked</b><br>
+    <b>Entered number:</b> ${escapeHTML(input)}<br>
+    <b>Country:</b> ${country}<br><br>
+    <b>Owner name:</b> Not available<br>
+    <b>Father's name:</b> Not available<br>
+    <b>Exact address:</b> Not available<br>
+    <b>Telecom operator:</b> Requires a data provider<br>
+    <hr style="border-color:#263b61">
+    <small>This is a format check, not proof that the number is active or belongs to a particular person.</small>
+  `;
+}
+function escapeHTML(value){
+  return value.replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;',
+    '"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+</script></body>
+</html>
